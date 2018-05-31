@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>别踩白块</title>
+</head>
+<body>
+	<canvas id="canvas"></canvas>
+	<script>
+		
+		(function(){
+			var Black=window.Black=function(){
+				this.canvas	=document.getElementById('canvas');
+				this.ctx=this.canvas.getContext("2d");
+				this.winW=document.documentElement.clientWidth;
+				this.winH=document.documentElement.clientHeight;
+				this.canvas.width=this.winW;
+				this.canvas.height=this.winH;
+				function Rect(y, arr) {
+					this.y = y;
+					this.arr = arr;
+				}
+				self.arr=new Array();
+				for(var i=0;i<6;i++){
+					var arr1=new Array();
+					for(var j=0;j<4;j++){
+						arr1[j]=0
+					}//0表示白，2表示黑
+					var n=Math.floor(Math.random() * 4)
+					arr1[n]=2;
+					arr[i]=new Rect(i * (this.winH/4)- (this.winH/2), arr1)
+					console.log(arr[i])
+				}
+				
+				this.fno=0;
+				this.timer=null;
+				// 设置画布高度和宽度
+				this.start();
+				
+			}
+			Black.prototype.start=function(){
+				var self=this;
+				this.timer=setInterval(function(){
+			    //清屏
+				self.ctx.clearRect(0,0,self.canvas.width,self.canvas.height);
+				self.fno++;
+		        self.goBlack();
+				self.ctx.font="16px 楷体";
+				self.ctx.textAlign="left";
+				self.ctx.fillText("FNO:"+self.fno,10,20);
+				},0.1)
+			}
+			Black.prototype.drawBlack=function(){
+				for (var i = 0; i <arr.length; i++) {
+							for (var j = 0; j < arr[i].arr.length; j++) {
+								switch(arr[i].arr[j]) {
+									case 0:
+										this.ctx.fillStyle = "#ffffff";
+										break;
+									case 2:
+										this.ctx.fillStyle = "#000000";
+										break;
+								}
+								this.ctx.fillRect(j * (this.winW / 4), arr[i].y, (this.winW / 4), (this.winH / 4));
+								this.ctx.strokeStyle = "#666666";
+								this.ctx.strokeRect(j * (this.winW / 4), arr[i].y, (this.winW / 4), (this.winH / 4));
+							}
+							
+						}
+						this.ctx.strokeStyle = "#000000";
+						this.ctx.strokeRect(0, 0, this.winW, this.winH);
+			}
+			Black.prototype.goBlack=function(){
+				var self = this;
+				self.drawBlack();
+						for(var i = 0; i < arr.length; i++) {
+							arr[i].y++;
+							if(arr[i].y > this.winH) {
+								//出去了，就再利用
+								for(var j = 0; j < arr[i].arr.length; j++) {
+									arr[i].arr[j] = 0;
+								}
+								var n = Math.floor(Math.random() * 4);
+								arr[i].arr[n] = 2;
+								//放到最上面去
+								arr[i].y -= this.winH / 4 * 6;
+							}
+						}
+			}
+					
+	        var Black = new Black();
+				
+})()
+	</script>
+</body>
+</html>
